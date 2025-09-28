@@ -1,4 +1,4 @@
-import { Button, Divider, Paper, Stack, TextField, Typography } from "@mui/material";
+import { Button, Divider, Paper, Stack, Typography } from "@mui/material";
 import CategorySelect from "./CategorySelect";
 import SearchByText from "./SearchByText";
 
@@ -20,7 +20,7 @@ const SearchControls = ({
         variant="h1"
         sx={{ textAlign: "center", mb: 5, textWrap: "pretty" }}
       >
-        Find random joke about Chuck Norris
+        Chuck Norris Jokes
       </Typography>
 
       <Stack spacing={2}>
@@ -28,11 +28,11 @@ const SearchControls = ({
           Get Random Joke From All Jokes
         </Button>
 
-        <Divider />
+        <Divider textAlign="center">or</Divider>
 
         <SearchByText handleSearchJoke={handleSearchJoke} />
 
-        <Divider />
+        <Divider textAlign="center">or</Divider>
 
         <CategorySelect setSearchCategory={setSearchCategory} />
       </Stack>

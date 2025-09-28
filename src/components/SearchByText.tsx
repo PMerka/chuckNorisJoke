@@ -1,4 +1,4 @@
-import { Button, Stack, TextField } from "@mui/material";
+import { Button, Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { MINIMUM_TEXT_QUERY_LENGTH } from "../hooks/useSearchJokes";
 
@@ -12,22 +12,27 @@ const SearchByText = ({ handleSearchJoke }: SearchByTextProps) => {
   const tooShortString = searchTerm.length < MINIMUM_TEXT_QUERY_LENGTH;
 
   return (
-    <Stack direction="row" spacing={1}>
-      <TextField
-        fullWidth
-        size="small"
-        label="Search joke"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-      <Button
-        variant="contained"
-        onClick={() => handleSearchJoke(searchTerm)}
-        disabled={tooShortString}
-      >
-        Search
-      </Button>
-    </Stack>
+    <>
+      <Typography variant="h3" align="center">
+        Get a Random Joke By Text
+      </Typography>
+      <Stack direction="row" spacing={1}>
+        <TextField
+          fullWidth
+          size="small"
+          label="Search joke"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <Button
+          variant="outlined"
+          onClick={() => handleSearchJoke(searchTerm)}
+          disabled={tooShortString}
+        >
+          Search
+        </Button>
+      </Stack>
+    </>
   );
 };
 

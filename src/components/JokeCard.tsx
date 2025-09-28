@@ -1,4 +1,4 @@
-import { Chip, LinearProgress, Paper, Skeleton, Stack, Typography } from "@mui/material";
+import { Chip, LinearProgress, Paper, Stack, Typography } from "@mui/material";
 
 interface JokeCardProps {
   joke?: string;

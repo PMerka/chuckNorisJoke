@@ -65,9 +65,6 @@ function App() {
           setSearchCategory={handleSelectCategory}
         />
 
-        <div>{dataSource}</div>
-        <div>{category}</div>
-
         <JokeCard
           dataSource={dataSource}
           joke={combinedFetchedData?.data?.value}
