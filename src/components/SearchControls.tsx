@@ -1,9 +1,15 @@
 import { Button, Paper, Stack, TextField, Typography } from "@mui/material";
 import CategorySelect from "./CategorySelect";
 
-interface SearchControlsProps {}
+interface SearchControlsProps {
+  handleRefetchFullyRandomJoke: () => void;
+  setSearchCategory: (category: string) => void;
+}
 
-const SearchControls = (props: SearchControlsProps) => {
+const SearchControls = ({
+  handleRefetchFullyRandomJoke,
+  setSearchCategory,
+}: SearchControlsProps) => {
   return (
     <Paper elevation={10} sx={{ marginTop: 4, padding: 2, width: "100%" }}>
       <Typography
@@ -15,14 +21,16 @@ const SearchControls = (props: SearchControlsProps) => {
       </Typography>
 
       <Stack spacing={2}>
-        <Button variant="outlined">Get Random Joke From All Jokes</Button>
+        <Button variant="outlined" onClick={handleRefetchFullyRandomJoke}>
+          Get Random Joke From All Jokes
+        </Button>
 
         <Stack direction="row" spacing={1}>
           <TextField fullWidth size="small" label="Search joke" />
           <Button variant="contained">Search</Button>
         </Stack>
 
-        <CategorySelect />
+        <CategorySelect setSearchCategory={setSearchCategory} />
       </Stack>
     </Paper>
   );

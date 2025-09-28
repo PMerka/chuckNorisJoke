@@ -1,14 +1,18 @@
 import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from "@mui/material";
 import { useGetJokeCategories } from "../hooks/useGetJokeCategories";
 
-const CategorySelect = () => {
+interface CategorySelectProps {
+  setSearchCategory: (category: string) => void;
+}
+
+const CategorySelect = ({ setSearchCategory }: CategorySelectProps) => {
   const jokeCategoriesQuery = useGetJokeCategories();
   return (
     <FormControl fullWidth size="small">
       <InputLabel>{jokeCategoriesQuery.isLoading ? "Loading..." : "Category"}</InputLabel>
       <Select
         label="Category"
-        onChange={(e) => console.log(e.target.value)}
+        onChange={(e) => setSearchCategory(e.target.value as string)}
         disabled={jokeCategoriesQuery.isLoading}
       >
         {jokeCategoriesQuery.data?.map((category) => (
