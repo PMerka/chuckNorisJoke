@@ -74,6 +74,7 @@ function App() {
           joke={combinedFetchedData?.data?.value}
           category={combinedFetchedData?.data?.categories}
           isLoading={combinedFetchedData?.isFetching}
+          error={combinedFetchedData?.error || null}
         />
       </Container>
     </>

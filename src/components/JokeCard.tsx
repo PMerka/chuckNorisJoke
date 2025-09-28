@@ -5,6 +5,7 @@ interface JokeCardProps {
   category?: string[];
   dataSource?: string;
   isLoading?: boolean;
+  error?: Error | null;
 }
 
 const texts = {
@@ -13,22 +14,37 @@ const texts = {
   search: "Random joke based on search:",
 };
 
-const JokeCard = ({ joke, category, dataSource, isLoading }: JokeCardProps) => {
+const JokeCard = ({ joke, category, dataSource, isLoading, error }: JokeCardProps) => {
   const title = texts[dataSource as keyof typeof texts] || "Unknown joke source";
+
+  const cardStyle = {
+    marginTop: 4,
+    padding: 2,
+    width: "100%",
+    textAlign: "center",
+    mb: 5,
+    textWrap: "pretty",
+  };
+
+  if (error) {
+    return (
+      <Paper elevation={10} sx={cardStyle}>
+        <Typography variant="h2" sx={{ mb: 1 }}>
+          Error
+        </Typography>
+        <Typography variant="body1" sx={{ mb: 2 }} color="error">
+          {`Sorry, server was too afraid of Chuck Norris. Failed to load joke.`}
+        </Typography>
+        <Typography variant="body2" sx={{ mb: 2 }} color="error">
+          {`Error detail: ${error.message}`}
+        </Typography>
+      </Paper>
+    );
+  }
 
   if (isLoading) {
     return (
-      <Paper
-        elevation={10}
-        sx={{
-          marginTop: 4,
-          padding: 2,
-          width: "100%",
-          textAlign: "center",
-          mb: 5,
-          textWrap: "pretty",
-        }}
-      >
+      <Paper elevation={10} sx={cardStyle}>
         <Typography variant="h2" sx={{ mb: 1 }}>
           Loading...
         </Typography>
@@ -41,17 +57,7 @@ const JokeCard = ({ joke, category, dataSource, isLoading }: JokeCardProps) => {
   }
 
   return (
-    <Paper
-      elevation={10}
-      sx={{
-        marginTop: 4,
-        padding: 2,
-        width: "100%",
-        textAlign: "center",
-        mb: 5,
-        textWrap: "pretty",
-      }}
-    >
+    <Paper elevation={10} sx={cardStyle}>
       <Typography variant="h2" sx={{ mb: 3 }}>
         {title}
       </Typography>
