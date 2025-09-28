@@ -36,7 +36,9 @@ const JokeCard = ({ joke, category, dataSource, isLoading, error }: JokeCardProp
           {`Sorry, server was too afraid of Chuck Norris. Failed to load joke.`}
         </Typography>
         <Typography variant="body2" sx={{ mb: 2 }} color="error">
-          {`Error detail: ${error.message}`}
+          {error.message
+            ? `Error detail: ${error.message}`
+            : "No additional error details available."}
         </Typography>
       </Paper>
     );

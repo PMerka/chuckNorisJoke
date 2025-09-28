@@ -24,7 +24,7 @@ function App() {
   const handleSearchJoke = (searchTerm: string) => {
     setDataSource("search");
     setSearchString(searchTerm);
-    if (searchTerm === searchString) {
+    if (searchTerm === searchString && !randomJokeBySearchQuery.isFetching) {
       randomJokeBySearchQuery.refetch();
     }
   };
@@ -32,7 +32,7 @@ function App() {
   const handleSelectCategory = (newCategory: string) => {
     setDataSource("categories");
     setCategory(newCategory);
-    if (newCategory === category) {
+    if (newCategory === category && !randomJokeByCategoryQuery.isFetching) {
       randomJokeByCategoryQuery.refetch();
     }
   };
