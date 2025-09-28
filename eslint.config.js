@@ -19,9 +19,5 @@ export default defineConfig([
       ecmaVersion: 2020,
       globals: globals.browser,
     },
-    plugins: ["prettier"],
-    rules: {
-      "prettier/prettier": "error",
-    },
   },
 ]);

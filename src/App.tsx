@@ -1,16 +1,4 @@
-import {
-  Box,
-  Button,
-  Container,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Paper,
-  Select,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Container } from "@mui/material";
 import JokeCard from "./components/JokeCard";
 import SearchControls from "./components/SearchControls";
 
