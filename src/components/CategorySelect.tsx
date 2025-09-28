@@ -12,15 +12,20 @@ import { useState } from "react";
 
 interface CategorySelectProps {
   setSearchCategory: (category: string) => void;
+  dataSource?: string;
 }
 
-const CategorySelect = ({ setSearchCategory }: CategorySelectProps) => {
+const CategorySelect = ({ setSearchCategory, dataSource }: CategorySelectProps) => {
   const jokeCategoriesQuery = useGetJokeCategories();
   const [category, setCategory] = useState<string>("");
 
   return (
     <>
-      <Typography variant="h3" align="center">
+      <Typography
+        variant="h3"
+        align="center"
+        sx={dataSource === "categories" ? { color: "primary.main", fontWeight: "bold" } : {}}
+      >
         Get a Random Joke From Category
       </Typography>
       <FormControl fullWidth size="small">

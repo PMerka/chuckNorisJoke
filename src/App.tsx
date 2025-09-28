@@ -63,6 +63,7 @@ function App() {
         }}
       >
         <SearchControls
+          dataSource={dataSource}
           handleSearchJoke={handleSearchJoke}
           handleRefetchFullyRandomJoke={handleRefetchFullyRandomJoke}
           setSearchCategory={handleSelectCategory}

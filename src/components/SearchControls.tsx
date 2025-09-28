@@ -6,12 +6,14 @@ interface SearchControlsProps {
   handleRefetchFullyRandomJoke: () => void;
   setSearchCategory: (category: string) => void;
   handleSearchJoke: (searchTerm: string) => void;
+  dataSource: string;
 }
 
 const SearchControls = ({
   handleRefetchFullyRandomJoke,
   setSearchCategory,
   handleSearchJoke,
+  dataSource,
 }: SearchControlsProps) => {
   return (
     <Paper elevation={10} sx={{ marginTop: 4, padding: 2, width: "100%" }}>
@@ -24,17 +26,25 @@ const SearchControls = ({
       </Typography>
 
       <Stack spacing={2}>
+        <Divider textAlign="center" />
+        <Typography
+          variant="h3"
+          align="center"
+          sx={dataSource === "random" ? { color: "primary.main", fontWeight: "bold" } : {}}
+        >
+          Get a Fully Random Joke
+        </Typography>
         <Button variant="outlined" onClick={handleRefetchFullyRandomJoke}>
           Get Random Joke From All Jokes
         </Button>
-
-        <Divider textAlign="center">or</Divider>
-
-        <SearchByText handleSearchJoke={handleSearchJoke} />
-
-        <Divider textAlign="center">or</Divider>
-
-        <CategorySelect setSearchCategory={setSearchCategory} />
+        <Divider textAlign="center">
+          <Typography variant="body2">or</Typography>
+        </Divider>
+        <SearchByText handleSearchJoke={handleSearchJoke} dataSource={dataSource} />
+        <Divider textAlign="center">
+          <Typography variant="body2">or</Typography>
+        </Divider>
+        <CategorySelect setSearchCategory={setSearchCategory} dataSource={dataSource} />
       </Stack>
     </Paper>
   );

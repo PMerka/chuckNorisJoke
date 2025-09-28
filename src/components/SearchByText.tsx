@@ -4,16 +4,21 @@ import { MINIMUM_TEXT_QUERY_LENGTH } from "../hooks/useSearchJokes";
 
 interface SearchByTextProps {
   handleSearchJoke: (searchTerm: string) => void;
+  dataSource?: string;
 }
 
-const SearchByText = ({ handleSearchJoke }: SearchByTextProps) => {
+const SearchByText = ({ handleSearchJoke, dataSource }: SearchByTextProps) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const tooShortString = searchTerm.length < MINIMUM_TEXT_QUERY_LENGTH;
 
   return (
     <>
-      <Typography variant="h3" align="center">
+      <Typography
+        variant="h3"
+        align="center"
+        sx={dataSource === "search" ? { color: "primary.main", fontWeight: "bold" } : {}}
+      >
         Get a Random Joke By Text
       </Typography>
       <Stack direction="row" spacing={1}>
