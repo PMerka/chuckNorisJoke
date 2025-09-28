@@ -29,9 +29,12 @@ function App() {
     }
   };
 
-  const handleSelectCategory = (category: string) => {
+  const handleSelectCategory = (newCategory: string) => {
     setDataSource("categories");
-    setCategory(category);
+    setCategory(newCategory);
+    if (newCategory === category) {
+      randomJokeByCategoryQuery.refetch();
+    }
   };
 
   const combineFetchedData = () => {
