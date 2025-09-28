@@ -1,4 +1,4 @@
-import { Chip, Paper, Stack, Typography } from "@mui/material";
+import { Chip, LinearProgress, Paper, Skeleton, Stack, Typography } from "@mui/material";
 
 interface JokeCardProps {
   joke?: string;
@@ -29,9 +29,10 @@ const JokeCard = ({ joke, category, dataSource, isLoading }: JokeCardProps) => {
           textWrap: "pretty",
         }}
       >
-        <Typography variant="h2" sx={{ mb: 3 }}>
+        <Typography variant="h2" sx={{ mb: 1 }}>
           Loading...
         </Typography>
+        <LinearProgress sx={{ width: "100%", mb: 2 }} />
         <Typography variant="body1" sx={{ mb: 2 }}>
           Chuck Norris doesn't wait for API. API waits for Chuck Norris.
         </Typography>

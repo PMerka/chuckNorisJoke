@@ -4,15 +4,17 @@ import SearchControls from "./components/SearchControls";
 import { useGetRandomJoke } from "./hooks/useGetRandomJoke";
 import { useState } from "react";
 import { useGetRandomJokeByCategory } from "./hooks/useGetRandomJokeByCategory";
+import { useSearchJokes } from "./hooks/useSearchJokes";
 
 function App() {
   const [dataSource, setDataSource] = useState("random"); // "random", "search", "categories"
   const [category, setCategory] = useState<string | null>(null);
-  const [searchString, setSearchString] = useState<string | null>(null);
+  const [searchString, setSearchString] = useState<string>("");
 
   // Data fetching hooks
   const randomJokeQuery = useGetRandomJoke();
   const randomJokeByCategoryQuery = useGetRandomJokeByCategory(category);
+  const randomJokeBySearchQuery = useSearchJokes(searchString); // Implement search functionality when ready
 
   const handleRefetchFullyRandomJoke = () => {
     setDataSource("random");
@@ -21,13 +23,15 @@ function App() {
 
   const handleSearchJoke = (searchTerm: string) => {
     setDataSource("search");
-    // Implement search functionality here
+    setSearchString(searchTerm);
+    if (searchTerm === searchString) {
+      randomJokeBySearchQuery.refetch();
+    }
   };
 
   const handleSelectCategory = (category: string) => {
     setDataSource("categories");
     setCategory(category);
-    // Implement category selection functionality here
   };
 
   const combineFetchedData = () => {
@@ -36,7 +40,7 @@ function App() {
     } else if (dataSource === "categories") {
       return randomJokeByCategoryQuery;
     } else if (dataSource === "search") {
-      return null; // Implement search functionality when ready
+      return randomJokeBySearchQuery;
     }
     return null;
   };
@@ -56,6 +60,7 @@ function App() {
         }}
       >
         <SearchControls
+          handleSearchJoke={handleSearchJoke}
           handleRefetchFullyRandomJoke={handleRefetchFullyRandomJoke}
           setSearchCategory={handleSelectCategory}
         />
