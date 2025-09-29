@@ -14,7 +14,7 @@ function App() {
   // Data fetching hooks
   const randomJokeQuery = useGetRandomJoke();
   const randomJokeByCategoryQuery = useGetRandomJokeByCategory(category);
-  const randomJokeBySearchQuery = useSearchJokes(searchString); // Implement search functionality when ready
+  const [randomJokeBySearchQuery, renewRandom] = useSearchJokes(searchString);
 
   const handleRefetchFullyRandomJoke = () => {
     setDataSource("random");
@@ -25,7 +25,7 @@ function App() {
     setDataSource("search");
     setSearchString(searchTerm);
     if (searchTerm === searchString && !randomJokeBySearchQuery.isFetching) {
-      randomJokeBySearchQuery.refetch();
+      renewRandom();
     }
   };
 
