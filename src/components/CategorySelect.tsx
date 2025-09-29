@@ -29,9 +29,12 @@ const CategorySelect = ({ setSearchCategory, dataSource }: CategorySelectProps) 
         Get a Random Joke From Category
       </Typography>
       <FormControl fullWidth size="small">
-        <InputLabel>{jokeCategoriesQuery.isLoading ? "Loading..." : "Category"}</InputLabel>
+        <InputLabel id="category-label">
+          {jokeCategoriesQuery.isLoading ? "Loading..." : "Category"}
+        </InputLabel>
         <Select
-          label="Category"
+          labelId="category-label"
+          label="category"
           onChange={(e) => setCategory(e.target.value as string)}
           value={category}
           disabled={jokeCategoriesQuery.isLoading}

@@ -67,13 +67,11 @@ const JokeCard = ({ joke, category, dataSource, isLoading, error }: JokeCardProp
         "{joke}"
       </Typography>
       {category && category.length > 0 && (
-        <>
-          <Stack direction="row" spacing={1} justifyContent="end" flexWrap="wrap" width={"100%"}>
-            {category.map((cat) => (
-              <Chip key={cat} label={cat} color="primary" variant="outlined" />
-            ))}
-          </Stack>
-        </>
+        <Stack direction="row" spacing={1} justifyContent="end" flexWrap="wrap" width={"100%"}>
+          {category.map((cat) => (
+            <Chip key={cat} label={cat} color="primary" variant="outlined" />
+          ))}
+        </Stack>
       )}
     </Paper>
   );

@@ -51,33 +51,31 @@ function App() {
   const combinedFetchedData = combineFetchedData();
 
   return (
-    <>
-      <Container
-        maxWidth="xs"
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "start",
-          minHeight: "80dvh",
-        }}
-      >
-        <SearchControls
-          dataSource={dataSource}
-          handleSearchJoke={handleSearchJoke}
-          handleRefetchFullyRandomJoke={handleRefetchFullyRandomJoke}
-          setSearchCategory={handleSelectCategory}
-        />
+    <Container
+      maxWidth="xs"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "start",
+        minHeight: "80dvh",
+      }}
+    >
+      <SearchControls
+        dataSource={dataSource}
+        handleSearchJoke={handleSearchJoke}
+        handleRefetchFullyRandomJoke={handleRefetchFullyRandomJoke}
+        setSearchCategory={handleSelectCategory}
+      />
 
-        <JokeCard
-          dataSource={dataSource}
-          joke={combinedFetchedData?.data?.value}
-          category={combinedFetchedData?.data?.categories}
-          isLoading={combinedFetchedData?.isFetching}
-          error={combinedFetchedData?.error || null}
-        />
-      </Container>
-    </>
+      <JokeCard
+        dataSource={dataSource}
+        joke={combinedFetchedData?.data?.value}
+        category={combinedFetchedData?.data?.categories}
+        isLoading={combinedFetchedData?.isFetching}
+        error={combinedFetchedData?.error || null}
+      />
+    </Container>
   );
 }
 
