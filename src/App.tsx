@@ -2,47 +2,41 @@ import { Container } from "@mui/material";
 import JokeCard from "./components/JokeCard";
 import SearchControls from "./components/SearchControls";
 import { useGetRandomJoke } from "./hooks/useGetRandomJoke";
-import { useState } from "react";
 import { useGetRandomJokeByCategory } from "./hooks/useGetRandomJokeByCategory";
 import { useSearchJokes } from "./hooks/useSearchJokes";
+import { useJokeDataSourceSettings } from "./hooks/useJokeDataSourceSettings";
 
 function App() {
-  const [dataSource, setDataSource] = useState("random"); // "random", "search", "categories"
-  const [category, setCategory] = useState<string | null>(null);
-  const [searchString, setSearchString] = useState<string>("");
+  const [state, dispatch] = useJokeDataSourceSettings();
 
   // Data fetching hooks
   const randomJokeQuery = useGetRandomJoke();
-  const randomJokeByCategoryQuery = useGetRandomJokeByCategory(category);
-  const [randomJokeBySearchQuery, renewRandom] = useSearchJokes(searchString);
+  const randomJokeByCategoryQuery = useGetRandomJokeByCategory(state.category);
+  const [randomJokeBySearchQuery, renewRandom] = useSearchJokes(state.searchString);
 
   const handleRefetchFullyRandomJoke = () => {
-    setDataSource("random");
+    dispatch({ type: "SET_RANDOM" });
     randomJokeQuery.refetch();
   };
 
   const handleSearchJoke = (searchTerm: string) => {
-    setDataSource("search");
-    setSearchString(searchTerm);
-    if (searchTerm === searchString && !randomJokeBySearchQuery.isFetching) {
-      renewRandom();
-    }
+    dispatch({ type: "SET_SEARCH", payload: searchTerm });
+    renewRandom();
   };
 
   const handleSelectCategory = (newCategory: string) => {
-    setDataSource("categories");
-    setCategory(newCategory);
-    if (newCategory === category && !randomJokeByCategoryQuery.isFetching) {
+    if (newCategory === state.category && !randomJokeByCategoryQuery.isFetching) {
       randomJokeByCategoryQuery.refetch();
     }
+    dispatch({ type: "SET_CATEGORY", payload: newCategory });
   };
 
   const combineFetchedData = () => {
-    if (dataSource === "random") {
+    if (state.dataSource === "random") {
       return randomJokeQuery;
-    } else if (dataSource === "categories") {
+    } else if (state.dataSource === "categories") {
       return randomJokeByCategoryQuery;
-    } else if (dataSource === "search") {
+    } else if (state.dataSource === "search") {
       return randomJokeBySearchQuery;
     }
     return null;
@@ -62,14 +56,14 @@ function App() {
       }}
     >
       <SearchControls
-        dataSource={dataSource}
+        dataSource={state.dataSource}
         handleSearchJoke={handleSearchJoke}
         handleRefetchFullyRandomJoke={handleRefetchFullyRandomJoke}
         setSearchCategory={handleSelectCategory}
       />
 
       <JokeCard
-        dataSource={dataSource}
+        dataSource={state.dataSource}
         joke={combinedFetchedData?.data?.value}
         category={combinedFetchedData?.data?.categories}
         isLoading={combinedFetchedData?.isFetching}

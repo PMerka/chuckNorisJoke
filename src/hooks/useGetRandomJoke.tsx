@@ -11,8 +11,7 @@ export const useGetRandomJoke = () => {
       const data: JokeItem = response.data;
       return data;
     },
-    meta: {
-      query: "random-joke",
-    },
+    staleTime: 0,
+    gcTime: 0,
   });
 };

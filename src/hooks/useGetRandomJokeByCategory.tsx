@@ -14,5 +14,7 @@ export const useGetRandomJokeByCategory = (category: string | null) => {
       return data;
     },
     enabled: !!category && category.length >= 3,
+    staleTime: 0,
+    gcTime: 0,
   });
 };
