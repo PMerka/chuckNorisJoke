@@ -6,8 +6,13 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   test: {
-    globals: true, // ← tohle zapni
+    globals: true,
     environment: "jsdom",
     setupFiles: "./src/setupTests.ts",
+  },
+  resolve: {
+    alias: {
+      src: "/src",
+    },
   },
 });
