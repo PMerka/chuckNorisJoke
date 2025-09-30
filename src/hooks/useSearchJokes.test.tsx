@@ -2,8 +2,10 @@ import { renderHook, act, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useSearchJokes } from "./useSearchJokes";
 import type { SearchJokesResponse } from "../types/apiData";
-import { vi } from "vitest";
+import { vi, type MockedFunction } from "vitest";
 import axios from "../utils/axios";
+
+const mockedAxiosGet = axios.get as MockedFunction<typeof axios.get>;
 
 const mockResponse: SearchJokesResponse = {
   total: 3,
@@ -51,13 +53,13 @@ const createWrapper = () => {
 
 beforeEach(() => {
   vi.restoreAllMocks();
-  (axios.get as any).mockResolvedValue({ data: mockResponse });
+  mockedAxiosGet.mockResolvedValue({ data: mockResponse });
 });
 
 describe("useSearchJokes hook", () => {
   it("returns fallback if no results", async () => {
     const emptyResponse: SearchJokesResponse = { total: 0, result: [] };
-    (axios.get as any).mockResolvedValueOnce({ data: emptyResponse });
+    mockedAxiosGet.mockResolvedValueOnce({ data: emptyResponse });
 
     const { result } = renderHook(() => useSearchJokes("abc"), { wrapper: createWrapper() });
 
