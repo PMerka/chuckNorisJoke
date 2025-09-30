@@ -7,36 +7,38 @@ import { useSearchJokes } from "./hooks/useSearchJokes";
 import { useJokeDataSourceSettings } from "./hooks/useJokeDataSourceSettings";
 
 function App() {
-  const [state, dispatch] = useJokeDataSourceSettings();
+  const [settings, dispatchSettings] = useJokeDataSourceSettings();
 
   // Data fetching hooks
   const randomJokeQuery = useGetRandomJoke();
-  const randomJokeByCategoryQuery = useGetRandomJokeByCategory(state.category);
-  const [randomJokeBySearchQuery, renewRandom] = useSearchJokes(state.searchString);
+  const randomJokeByCategoryQuery = useGetRandomJokeByCategory(settings.category);
+  const [randomJokeBySearchQuery, renewRandom] = useSearchJokes(settings.searchString);
 
   const handleRefetchFullyRandomJoke = () => {
-    dispatch({ type: "SET_RANDOM" });
+    dispatchSettings({ type: "SET_RANDOM" });
     randomJokeQuery.refetch();
   };
 
   const handleSearchJoke = (searchTerm: string) => {
-    dispatch({ type: "SET_SEARCH", payload: searchTerm });
+    dispatchSettings({ type: "SET_SEARCH", payload: searchTerm });
     renewRandom();
   };
 
   const handleSelectCategory = (newCategory: string) => {
-    if (newCategory === state.category && !randomJokeByCategoryQuery.isFetching) {
+    // If the same category is selected again, manually refetch.
+    // If the category changes, TanStack Query will auto-refetch due to dependency change.
+    if (newCategory === settings.category && !randomJokeByCategoryQuery.isFetching) {
       randomJokeByCategoryQuery.refetch();
     }
-    dispatch({ type: "SET_CATEGORY", payload: newCategory });
+    dispatchSettings({ type: "SET_CATEGORY", payload: newCategory });
   };
 
   const combineFetchedData = () => {
-    if (state.dataSource === "random") {
+    if (settings.dataSource === "random") {
       return randomJokeQuery;
-    } else if (state.dataSource === "categories") {
+    } else if (settings.dataSource === "categories") {
       return randomJokeByCategoryQuery;
-    } else if (state.dataSource === "search") {
+    } else if (settings.dataSource === "search") {
       return randomJokeBySearchQuery;
     }
     return null;
@@ -56,14 +58,14 @@ function App() {
       }}
     >
       <SearchControls
-        dataSource={state.dataSource}
+        dataSource={settings.dataSource}
         handleSearchJoke={handleSearchJoke}
         handleRefetchFullyRandomJoke={handleRefetchFullyRandomJoke}
         setSearchCategory={handleSelectCategory}
       />
 
       <JokeCard
-        dataSource={state.dataSource}
+        dataSource={settings.dataSource}
         joke={combinedFetchedData?.data?.value}
         category={combinedFetchedData?.data?.categories}
         isLoading={combinedFetchedData?.isFetching}
