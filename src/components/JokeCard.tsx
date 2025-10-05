@@ -24,6 +24,7 @@ const JokeCard = ({ joke, category, dataSource, isLoading, error }: JokeCardProp
     textAlign: "center",
     mb: 5,
     textWrap: "pretty",
+    minHeight: 200,
   };
 
   if (error) {
@@ -59,7 +60,7 @@ const JokeCard = ({ joke, category, dataSource, isLoading, error }: JokeCardProp
   }
 
   return (
-    <Paper elevation={10} sx={cardStyle}>
+    <Paper elevation={10} sx={cardStyle} data-testid="joke-card">
       <Typography variant="h2" sx={{ mb: 3 }}>
         {title}
       </Typography>

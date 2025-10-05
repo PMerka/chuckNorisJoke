@@ -1,48 +1,10 @@
 import { renderHook, act, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useSearchJokes } from "./useSearchJokes";
-import type { SearchJokesResponse } from "../types/apiData";
-import { vi, type MockedFunction } from "vitest";
-import axios from "../utils/axios";
-
-const mockedAxiosGet = axios.get as MockedFunction<typeof axios.get>;
-
-const mockResponse: SearchJokesResponse = {
-  total: 3,
-  result: [
-    {
-      id: "1",
-      value: "joke 1",
-      categories: [],
-      created_at: "",
-      updated_at: "",
-      icon_url: "",
-      url: "",
-    },
-    {
-      id: "2",
-      value: "joke 2",
-      categories: [],
-      created_at: "",
-      updated_at: "",
-      icon_url: "",
-      url: "",
-    },
-    {
-      id: "3",
-      value: "joke 3",
-      categories: [],
-      created_at: "",
-      updated_at: "",
-      icon_url: "",
-      url: "",
-    },
-  ],
-};
-
-vi.mock("../utils/axios", () => ({
-  default: { get: vi.fn() },
-}));
+import { vi } from "vitest";
+import { testingServer } from "src/test/mocks/server";
+import { http, HttpResponse } from "msw";
+import apiRoutes, { VITE_API_URL } from "src/constants/apiRoutes";
 
 const createWrapper = () => {
   const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
@@ -51,16 +13,13 @@ const createWrapper = () => {
   );
 };
 
-beforeEach(() => {
-  vi.restoreAllMocks();
-  mockedAxiosGet.mockResolvedValue({ data: mockResponse });
-});
-
 describe("useSearchJokes hook", () => {
   it("returns fallback if no results", async () => {
-    const emptyResponse: SearchJokesResponse = { total: 0, result: [] };
-    mockedAxiosGet.mockResolvedValueOnce({ data: emptyResponse });
-
+    testingServer.use(
+      http.get(`${VITE_API_URL}${apiRoutes.search}`, () => {
+        return HttpResponse.json({ total: 0, result: [] }, { status: 200 });
+      })
+    );
     const { result } = renderHook(() => useSearchJokes("abc"), { wrapper: createWrapper() });
 
     await waitFor(() => expect(result.current[0].isSuccess).toBe(true));
@@ -75,7 +34,7 @@ describe("useSearchJokes hook", () => {
 
     await waitFor(() => expect(result.current[0].isSuccess).toBe(true));
 
-    expect(result.current[0].data.value).toBe("joke 1");
+    expect(result.current[0].data.value).toBe("1st funny joke with abc");
   });
 
   it("joke is updated based if updateRandomSeed is triggered", async () => {
@@ -84,7 +43,7 @@ describe("useSearchJokes hook", () => {
     const { result } = renderHook(() => useSearchJokes("abc"), { wrapper: createWrapper() });
 
     await waitFor(() => expect(result.current[0].isSuccess).toBe(true));
-    expect(result.current[0].data.value).toBe("joke 1");
+    expect(result.current[0].data.value).toBe("1st funny joke with abc");
 
     vi.spyOn(Math, "random").mockReturnValueOnce(0.9);
 
@@ -92,6 +51,6 @@ describe("useSearchJokes hook", () => {
       result.current[1]();
     });
 
-    expect(result.current[0].data.value).toBe("joke 3");
+    expect(result.current[0].data.value).toBe("2nd funny joke with abc");
   });
 });

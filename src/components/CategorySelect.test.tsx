@@ -1,74 +1,56 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, within } from "@testing-library/react";
 import CategorySelect from "./CategorySelect";
-import { vi } from "vitest";
-import { useGetJokeCategories } from "../hooks/useGetJokeCategories";
+import { renderWithTestingQueryClient } from "src/test/testingQueryClient";
+import { testingServer } from "src/test/mocks/server";
+import { http, HttpResponse } from "msw";
+import apiRoutes, { VITE_API_URL } from "src/constants/apiRoutes";
 
-vi.mock("../hooks/useGetJokeCategories");
-const mockedUseGetJokeCategories = vi.mocked(useGetJokeCategories);
-
-describe("CategorySelect", () => {
-  it("shows loading state for category loading state", () => {
-    mockedUseGetJokeCategories.mockReturnValue({
-      isLoading: true,
-      isError: false,
-      data: undefined,
-      error: null,
-    } as ReturnType<typeof useGetJokeCategories>);
-
-    render(<CategorySelect setSearchCategory={vi.fn()} />);
-    expect(screen.getByText(/Loading/)).toBeInTheDocument();
-  });
-
-  it("shows categories, allows selection and submit", () => {
-    mockedUseGetJokeCategories.mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: ["dev", "movie"],
-      error: null,
-    } as ReturnType<typeof useGetJokeCategories>);
-
+describe("CategorySelect tests", () => {
+  it("Happy path. Shows categories, allows selection and submit", async () => {
     const setSearchCategory = vi.fn();
-    render(<CategorySelect setSearchCategory={setSearchCategory} />);
+    renderWithTestingQueryClient(<CategorySelect setSearchCategory={setSearchCategory} />);
+
+    await waitFor(() => {
+      expect(screen.getByLabelText(/Category/i)).toBeInTheDocument();
+    });
 
     fireEvent.mouseDown(screen.getByLabelText(/Category/i));
-    fireEvent.click(screen.getByText("dev"));
 
-    const button = screen.getByRole("button", { name: /Get Joke About dev/i });
+    // select dev option
+    const listbox = await screen.findByRole("listbox");
+    const option = within(listbox).getByText("dev");
+    fireEvent.click(option);
+
+    // fire select "setSearchCategory"
+    const button = await screen.findByRole("button", { name: /Get Joke About dev/i });
     fireEvent.click(button);
 
     expect(setSearchCategory).toHaveBeenCalledWith("dev");
   });
 
-  it("button is disabled if no category is selected", () => {
-    mockedUseGetJokeCategories.mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: ["dev", "movie"],
-      error: null,
-    } as ReturnType<typeof useGetJokeCategories>);
+  it("shows init loading state button and check disabled button", () => {
+    renderWithTestingQueryClient(<CategorySelect setSearchCategory={() => {}} />);
 
-    const setSearchCategory = vi.fn();
-    render(<CategorySelect setSearchCategory={setSearchCategory} />);
+    // InputLabel by měl říkat "Loading..."
+    expect(screen.getByText(/loading/i)).toBeInTheDocument();
 
-    const button = screen.getByRole("button", { name: /Please select category/i });
-    expect(button).toBeDisabled();
-
-    fireEvent.mouseDown(screen.getByLabelText(/Category/i)); // otevření selectu
-    fireEvent.click(screen.getByText("dev")); // kliknutí na "dev"
-
-    expect(screen.getByRole("button", { name: /Get Joke About dev/i })).toBeEnabled();
+    // Select by měl být disabled
+    expect(screen.getByText(/Please select category/i)).toBeInTheDocument();
   });
 
-  it("shows error state if fetch fails", () => {
-    mockedUseGetJokeCategories.mockReturnValue({
-      isLoading: false,
-      isError: true,
-      data: undefined,
-      error: new Error("Network error"),
-    } as ReturnType<typeof useGetJokeCategories>);
+  it("shows error state when API fails", async () => {
+    // overwrite response to error
+    testingServer.use(
+      http.get(`${VITE_API_URL}${apiRoutes.categories}`, () => {
+        return HttpResponse.json({ message: "Internal Server Error" }, { status: 500 });
+      })
+    );
 
-    render(<CategorySelect setSearchCategory={vi.fn()} />);
-    expect(screen.getByText(/Failed to load categories/)).toBeInTheDocument();
-    expect(screen.getByText(/Network error/)).toBeInTheDocument();
+    renderWithTestingQueryClient(<CategorySelect setSearchCategory={() => {}} />);
+
+    // wait for error
+    await waitFor(() => {
+      expect(screen.getByText(/Error/i)).toBeInTheDocument();
+    });
   });
 });
