@@ -55,8 +55,6 @@ describe("App main features testing", () => {
 
     fireEvent.click(button);
 
-    screen.debug(undefined, Infinity);
-
     await waitFor(() => {
       expect(screen.getByText(/2nd funny joke with abc/i)).toBeInTheDocument();
     });

@@ -14,6 +14,11 @@ const getRandomJokeFromResults = (data: SearchJokesResponse | undefined, randomS
 // Minimum query length to trigger search required by the API
 export const MINIMUM_TEXT_QUERY_LENGTH = 3;
 
+/**
+ * Fetches
+ * @param queryString
+ * @returns query with single random joke with searched string
+ */
 export const useSearchJokes = (queryString: string) => {
   const [randomSeed, setRandomSeed] = useState(Math.random());
 

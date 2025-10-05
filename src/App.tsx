@@ -1,50 +1,16 @@
 import { Container } from "@mui/material";
 import JokeCard from "./components/JokeCard";
 import SearchControls from "./components/SearchControls";
-import { useGetRandomJoke } from "./hooks/useGetRandomJoke";
-import { useGetRandomJokeByCategory } from "./hooks/useGetRandomJokeByCategory";
-import { useSearchJokes } from "./hooks/useSearchJokes";
-import { useJokeDataSourceSettings } from "./hooks/useJokeDataSourceSettings";
+import { useJokesController } from "./hooks/useJokesController";
 
 function App() {
-  const [settings, dispatchSettings] = useJokeDataSourceSettings();
-
-  // Data fetching hooks
-  const randomJokeQuery = useGetRandomJoke();
-  const randomJokeByCategoryQuery = useGetRandomJokeByCategory(settings.category);
-  const [randomJokeBySearchQuery, renewRandomSeed] = useSearchJokes(settings.searchString);
-
-  const handleRefetchFullyRandomJoke = () => {
-    dispatchSettings({ type: "SET_RANDOM" });
-    randomJokeQuery.refetch();
-  };
-
-  const handleSearchJoke = (searchTerm: string) => {
-    dispatchSettings({ type: "SET_SEARCH", payload: searchTerm });
-    renewRandomSeed();
-  };
-
-  const handleSelectCategory = (newCategory: string) => {
-    // If the same category is selected again, manually refetch.
-    // If the category changes, TanStack Query will auto-refetch due to dependency change.
-    if (newCategory === settings.category && !randomJokeByCategoryQuery.isFetching) {
-      randomJokeByCategoryQuery.refetch();
-    }
-    dispatchSettings({ type: "SET_CATEGORY", payload: newCategory });
-  };
-
-  const combineFetchedData = () => {
-    if (settings.dataSource === "random") {
-      return randomJokeQuery;
-    } else if (settings.dataSource === "categories") {
-      return randomJokeByCategoryQuery;
-    } else if (settings.dataSource === "search") {
-      return randomJokeBySearchQuery;
-    }
-    return null;
-  };
-
-  const combinedFetchedData = combineFetchedData();
+  const {
+    settings,
+    combinedFetchedData,
+    handleRefetchFullyRandomJoke,
+    handleSearchJoke,
+    handleSelectCategory,
+  } = useJokesController();
 
   return (
     <Container
