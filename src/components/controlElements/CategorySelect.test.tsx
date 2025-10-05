@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor, within } from "@testing-library/react";
+import { screen, fireEvent, waitFor, within } from "@testing-library/react";
 import CategorySelect from "./CategorySelect";
 import { renderWithTestingQueryClient } from "src/test/testingQueryClient";
 import { testingServer } from "src/test/mocks/server";

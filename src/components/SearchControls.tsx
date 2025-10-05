@@ -1,4 +1,4 @@
-import { Button, Divider, Paper, Stack, Typography } from "@mui/material";
+import { Divider, Paper, Stack, Typography } from "@mui/material";
 import SearchByText from "./controlElements/SearchByText";
 import CategorySelect from "./controlElements/CategorySelect";
 import GetRandomJoke from "./controlElements/GetRandomJoke";
