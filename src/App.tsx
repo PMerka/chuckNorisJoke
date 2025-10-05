@@ -12,7 +12,7 @@ function App() {
   // Data fetching hooks
   const randomJokeQuery = useGetRandomJoke();
   const randomJokeByCategoryQuery = useGetRandomJokeByCategory(settings.category);
-  const [randomJokeBySearchQuery, renewRandom] = useSearchJokes(settings.searchString);
+  const [randomJokeBySearchQuery, renewRandomSeed] = useSearchJokes(settings.searchString);
 
   const handleRefetchFullyRandomJoke = () => {
     dispatchSettings({ type: "SET_RANDOM" });
@@ -21,7 +21,7 @@ function App() {
 
   const handleSearchJoke = (searchTerm: string) => {
     dispatchSettings({ type: "SET_SEARCH", payload: searchTerm });
-    renewRandom();
+    renewRandomSeed();
   };
 
   const handleSelectCategory = (newCategory: string) => {

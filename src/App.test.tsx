@@ -35,7 +35,7 @@ describe("App main features testing", () => {
   it("gets random joke based on search text", async () => {
     renderWithTestingQueryClient(<App />);
 
-    // write st to "abc"
+    // write st to input "abc"
     const input = screen.getByLabelText(/search joke/i);
     expect(input).toHaveValue("");
     fireEvent.change(input, { target: { value: "abc" } });

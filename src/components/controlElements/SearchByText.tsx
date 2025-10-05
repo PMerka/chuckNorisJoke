@@ -1,6 +1,6 @@
 import { Button, Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import { MINIMUM_TEXT_QUERY_LENGTH } from "../../hooks/useSearchJokes";
+import { MINIMUM_TEXT_QUERY_LENGTH } from "src/hooks/useSearchJokes";
 
 interface SearchByTextProps {
   handleSearchJoke: (searchTerm: string) => void;
