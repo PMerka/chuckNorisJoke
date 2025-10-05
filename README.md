@@ -44,10 +44,8 @@ The application separates **server state** and **client/UI state**:
 
 - **Server state** – data returned from the API, managed by TanStack Query
 - **Client state** – user preferences and settings, managed with `useReducer`
-- **Derived state** – combination of both, computed in components and passed down as props (not saved in reactive state)
+- **Derived state** – combination of both for displaying only one joke based on settings
 
-For the UI - derived state (combine server state and client state) is calculated and passed to components.
-
-Slight advantage compared to pure client state is caching.
+Slight advantage compared to pure client state solution is caching.
 If you call random joke based on search twice there with same text,
 it will call API only once (it fetches all jokes and then select with math.random())
