@@ -16,6 +16,10 @@ export const useJokesController = () => {
   const [randomJokeBySearchQuery, renewRandomSeed] = useSearchJokes(settings.searchString);
 
   const handleRefetchFullyRandomJoke = () => {
+    if (randomJokeQuery?.isFetching) {
+      // Prevent repeat fetch until  previous is resolved
+      return;
+    }
     dispatchSettings({ type: "SET_RANDOM" });
     randomJokeQuery.refetch();
   };
