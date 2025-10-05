@@ -48,6 +48,6 @@ The application separates **server state** and **client/UI state**:
 
 For the UI - derived state (combine server state and client state) is calculated and passed to components.
 
-Using just server state eg. just useReducer or state management library, would be also ok.
-
-Slight advantage is caching => so if you call random joke based on search twice there will not only one API call (API returns all jokes and random joke is selected on FE).
+Slight advantage compared to pure client state is caching.
+If you call random joke based on search twice there with same text,
+it will call API only once (it fetches all jokes and then select with math.random())
