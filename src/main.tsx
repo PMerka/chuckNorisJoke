@@ -5,6 +5,8 @@ import App from "./App.tsx";
 import { ThemeProvider } from "@emotion/react";
 import theme from "./constants/ThemeMUI.ts";
 import { QueryClient, QueryClientProvider, QueryCache } from "@tanstack/react-query";
+import ErrorBoundary from "./components/ErrorBoundery.tsx";
+import ErrorPage from "./components/ErrorPage.tsx";
 
 const queryCache = new QueryCache({
   onError: () => {
@@ -27,9 +29,11 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
-      <QueryClientProvider client={queryClient}>
-        <App />
-      </QueryClientProvider>
+      <ErrorBoundary fallback={<ErrorPage />}>
+        <QueryClientProvider client={queryClient}>
+          <App />
+        </QueryClientProvider>
+      </ErrorBoundary>
     </ThemeProvider>
   </StrictMode>
 );
