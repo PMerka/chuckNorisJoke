@@ -7,8 +7,8 @@ import {
   Select,
   Typography,
 } from "@mui/material";
-import { useGetJokeCategories } from "../hooks/useGetJokeCategories";
 import { useState } from "react";
+import { useGetJokeCategories } from "src/hooks/useGetJokeCategories";
 
 interface CategorySelectProps {
   setSearchCategory: (category: string) => void;

@@ -1,6 +1,7 @@
 import { Button, Divider, Paper, Stack, Typography } from "@mui/material";
-import CategorySelect from "./CategorySelect";
-import SearchByText from "./SearchByText";
+import SearchByText from "./controlElements/SearchByText";
+import CategorySelect from "./controlElements/CategorySelect";
+import GetRandomJoke from "./controlElements/GetRandomJoke";
 
 interface SearchControlsProps {
   handleRefetchFullyRandomJoke: () => void;
@@ -27,16 +28,10 @@ const SearchControls = ({
 
       <Stack spacing={2}>
         <Divider textAlign="center" />
-        <Typography
-          variant="h3"
-          align="center"
-          sx={dataSource === "random" ? { color: "primary.main", fontWeight: "bold" } : {}}
-        >
-          Get a Fully Random Joke
-        </Typography>
-        <Button variant="outlined" onClick={handleRefetchFullyRandomJoke}>
-          Get Random Joke From All Jokes
-        </Button>
+        <GetRandomJoke
+          handleRefetchFullyRandomJoke={handleRefetchFullyRandomJoke}
+          dataSource={dataSource}
+        />
         <Divider textAlign="center">
           <Typography variant="body2">or</Typography>
         </Divider>
