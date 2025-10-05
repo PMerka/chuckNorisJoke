@@ -1,6 +1,9 @@
 import { fireEvent, screen, waitFor, within } from "@testing-library/react";
 import App from "./App";
 import { renderWithTestingQueryClient } from "./test/testingQueryClient";
+import { testingServer } from "./test/mocks/server";
+import { http, HttpResponse } from "msw";
+import apiRoutes, { VITE_API_URL } from "./constants/apiRoutes";
 
 describe("App main features testing", () => {
   it("renders random joke on the init load", async () => {
@@ -57,6 +60,25 @@ describe("App main features testing", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/2nd funny joke with abc/i)).toBeInTheDocument();
+    });
+  });
+
+  it("shows loading on init", async () => {
+    renderWithTestingQueryClient(<App />);
+    expect(screen.getByLabelText(/Loading/i)).toBeInTheDocument();
+  });
+
+  it("shows error", async () => {
+    testingServer.use(
+      http.get(`${VITE_API_URL}${apiRoutes.random}`, () => {
+        return HttpResponse.json({ message: "Internal Server Error" }, { status: 500 });
+      })
+    );
+
+    renderWithTestingQueryClient(<App />);
+    screen.debug(undefined, Infinity);
+    await waitFor(() => {
+      expect(screen.getByRole("alert")).toHaveTextContent(/Error/);
     });
   });
 });

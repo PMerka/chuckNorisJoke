@@ -29,7 +29,7 @@ const JokeCard = ({ joke, category, dataSource, isLoading, error }: JokeCardProp
 
   if (error) {
     return (
-      <Paper elevation={10} sx={cardStyle}>
+      <Paper elevation={10} sx={cardStyle} role="alert">
         <Typography variant="h2" sx={{ mb: 1 }}>
           Error
         </Typography>
@@ -47,7 +47,7 @@ const JokeCard = ({ joke, category, dataSource, isLoading, error }: JokeCardProp
 
   if (isLoading) {
     return (
-      <Paper elevation={10} sx={cardStyle}>
+      <Paper elevation={10} sx={cardStyle} role="status">
         <Typography variant="h2" sx={{ mb: 1 }}>
           Loading...
         </Typography>
@@ -60,7 +60,13 @@ const JokeCard = ({ joke, category, dataSource, isLoading, error }: JokeCardProp
   }
 
   return (
-    <Paper elevation={10} sx={cardStyle} data-testid="joke-card">
+    <Paper
+      elevation={10}
+      sx={cardStyle}
+      data-testid="joke-card"
+      role="region"
+      aria-label="Joke card"
+    >
       <Typography variant="h2" sx={{ mb: 3 }}>
         {title}
       </Typography>
